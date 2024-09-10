@@ -216,8 +216,8 @@ public class SimDataPlugin implements FlutterPlugin, MethodCallHandler, Activity
         ArrayList<PendingIntent> deliveredPendingIntents = new ArrayList<PendingIntent>();
 
         for (int m = 0; m < msgArray.size(); m++) {
-            sentPendingIntents.add(PendingIntent.getBroadcast(this, 0, new Intent(sent), 0));
-            deliveredPendingIntents.add(PendingIntent.getBroadcast(this, 0, new Intent(delivered), 0));
+            sentPendingIntents.add(PendingIntent.getBroadcast(context, 0, new Intent(sent), 0));
+            deliveredPendingIntents.add(PendingIntent.getBroadcast(context, 0, new Intent(delivered), 0));
         }
         
         smsManager.sendMultipartTextMessage(number, null, msgArray, sentPendingIntents, deliveredPendingIntents);
