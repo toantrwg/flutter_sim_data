@@ -212,7 +212,15 @@ public class SimDataPlugin implements FlutterPlugin, MethodCallHandler, Activity
       
       try {
         ArrayList<String> msgArray = smsManager.divideMessage(message);
-        smsManager.sendMultipartTextMessage(number, null, msgArray, null, null);
+        ArrayList<PendingIntent> sentPendingIntents = new ArrayList<PendingIntent>();
+        ArrayList<PendingIntent> deliveredPendingIntents = new ArrayList<PendingIntent>();
+
+        for (int m = 0; m < msgArray.size(); m++) {
+            sentPendingIntents.add(PendingIntent.getBroadcast(this, 0, new Intent(sent), 0));
+            deliveredPendingIntents.add(PendingIntent.getBroadcast(this, 0, new Intent(delivered), 0));
+        }
+        
+        smsManager.sendMultipartTextMessage(number, null, msgArray, sentPendingIntents, deliveredPendingIntents);
         result.success(true);
       } catch (Exception ex) {
         ex.printStackTrace();
