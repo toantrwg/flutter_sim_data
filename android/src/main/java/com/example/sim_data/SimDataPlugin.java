@@ -189,11 +189,11 @@ public class SimDataPlugin implements FlutterPlugin, MethodCallHandler, Activity
         @Override
         public void onReceive(Context context, Intent intent) {
         int res = getResultCode();
-        if(res == Activity.RESULT_OK){
-          Toast.makeText(context, "SMS Sent", Toast.LENGTH_SHORT).show();
-        }else{
-          Toast.makeText(context, "SMS not sent. Something went wrong!", Toast.LENGTH_SHORT).show();
-        }
+        // if(res == Activity.RESULT_OK){
+        //   Toast.makeText(context, "SMS Sent", Toast.LENGTH_SHORT).show();
+        // }else{
+        //   Toast.makeText(context, "SMS not sent. Something went wrong!", Toast.LENGTH_SHORT).show();
+        // }
         }
       }, new IntentFilter(sent));
 
@@ -201,15 +201,22 @@ public class SimDataPlugin implements FlutterPlugin, MethodCallHandler, Activity
         @Override
         public void onReceive(Context context, Intent intent) {
         int res = getResultCode();
-        if(res == Activity.RESULT_OK){
-          Toast.makeText(context, "SMS delivered", Toast.LENGTH_SHORT).show();
-        }else{
-          Toast.makeText(context, "SMS not delivered", Toast.LENGTH_SHORT).show();
-        }
+        // if(res == Activity.RESULT_OK){
+        //   Toast.makeText(context, "SMS delivered", Toast.LENGTH_SHORT).show();
+        // }else{
+        //   Toast.makeText(context, "SMS not delivered", Toast.LENGTH_SHORT).show();
+        // }
         }
       }, new IntentFilter(delivered));
-
-      smsManager.sendTextMessage(number, null, message, sendPendingIntent, deliveryPendingIntent);
+      
+      try {
+        ArrayList<String> msgArray = smsManager.divideMessage(message);
+        smsManager.sendMultipartTextMessage(number, null, msgArray, sendPendingIntent, deliveryPendingIntent);
+        result.success(false);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        result.success(false);
+      }
   }
 
   private void requestPermission(){
